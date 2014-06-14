@@ -3,8 +3,13 @@
 
 import doorlib
 from doorlib import knock_uds
+import argparse
 
-doorlib.read_acl()
+parser = argparse.ArgumentParser()
+parser.add_argument('credential',default='12345678')
+args = parser.parse_args()
 
-knock_uds()
+print "Knocking with credential '{0}'".format(args.credential)
+
+knock_uds(args.credential)
 
