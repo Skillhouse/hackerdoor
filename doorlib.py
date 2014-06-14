@@ -22,8 +22,8 @@ def read_acl():
         json_data=open(json_file)
         data = json.load(json_data)
         json_data.close()
-        pprint(data)
-
+        # pprint(data)
+        return(data)
 
 
 
@@ -60,7 +60,11 @@ def start_listening_uds():
                 data = connection.recv(16)
                 print >>sys.stderr, 'received "%s"' % data
                 if data:
-                    response = "Sure, why not"
+                    acl = read_acl()
+                    if data in acl.keys():
+                        response = "Sure, why not"
+                    else:
+                        response = "Away with you!"
                     print >>sys.stderr, 'sending data back to the client'
                     connection.sendall(response)
                 else:
