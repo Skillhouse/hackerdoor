@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+
+
+import doorlib
+from doorlib import knock_uds
+
+doorlib.read_acl()
+
+knock_uds()
+
