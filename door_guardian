@@ -8,12 +8,14 @@ print "Here!"
 
 from doorlib import start_listening_uds
 
+start_listening_uds()
 
 
-def do_main_program():
-    start_listening_uds()
-    time.sleep(5)
+
+#def do_main_program():
+#    start_listening_uds()
+#    time.sleep(5)
     
 
-with daemon.DaemonContext():
-    do_main_program()
+#with daemon.DaemonContext():
+#    do_main_program()
