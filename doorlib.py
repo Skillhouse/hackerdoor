@@ -29,6 +29,12 @@ from pprint import pprint
 
 config = ConfigParser.ConfigParser()
 
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.INFO)
+
+handler = logging.handlers.SysLogHandler(address = '/dev/log')
+my_logger.addHandler(handler)
+
 
 def read_acl():
     for version in [0]:
@@ -79,8 +85,10 @@ def start_listening_uds():
                 if data:
                     acl = read_acl()
                     if data in acl.keys():
+                        my_logger.info("hackerdoor:{2} admitted '{0}' ({1}) ".format(acl[data]['user_id'],acl[data]['name'],config.get('identity','location')))
                         response = "Sure, why not"
                     else:
+                        my_logger.info("hackerdoor:{1} rejected '{0}'  ".format(data,config.get('identity','location')))
                         response = "Away with you!"
                     print >>sys.stderr, 'sending data back to the client'
                     connection.sendall(response)
