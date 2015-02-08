@@ -18,7 +18,7 @@
 #include <linux/interrupt.h>
 
 #include <asm/irq.h>
-#include <mach/gpio.h>
+#include <linux/gpio.h>
 
 #define MAX_WIEGAND_BYTES 6
 
