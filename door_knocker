@@ -3,6 +3,8 @@
 
 import doorlib
 from doorlib import knock_uds
+doorlib.read_config()
+
 import argparse
 
 parser = argparse.ArgumentParser()

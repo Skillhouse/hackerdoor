@@ -5,10 +5,12 @@ import time
 
 print "Here!"
 
+import doorlib
 
-from doorlib import start_listening_uds
 
-start_listening_uds()
+doorlib.read_config()
+
+doorlib.start_listening_uds()
 
 
 
