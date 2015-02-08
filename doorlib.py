@@ -2,23 +2,26 @@ import socket
 import sys
 import os
 import json
+import ConfigParser
 from pprint import pprint
 
 
+#
+# These module-level variables are now captured in a config file. 
+#
+# door_user = "hackerdoor"
+# rootdir = '/home/{0}'.format(door_user)
+# uds_address = '{0}/doorsock'.format(rootdir);
+# json_dir = '{0}/json'.format(rootdir);
+#
 
-door_user = "hackerdoor"
 
-rootdir = '/home/{0}'.format(door_user)
-
-uds_address = '{0}/doorsock'.format(rootdir);
-
-json_dir = '{0}/json'.format(rootdir);
-
+config = ConfigParser.ConfigParser()
 
 
 def read_acl():
     for version in [0]:
-        json_file = '{0}/access.json'.format(json_dir)
+        json_file = config.get('paths','json_file')
         json_data=open(json_file)
         data = json.load(json_data)
         json_data.close()
@@ -27,10 +30,13 @@ def read_acl():
 
 
 
-
+def read_config():
+    config.read(['/etc/hackerdoor.cfg','hackerdoor.cfg'])
 
 
 def start_listening_uds():
+
+    uds_address = config.get('paths','uds_address')
 
     # Make sure the socket does not already exist
     try:
@@ -78,6 +84,8 @@ def start_listening_uds():
 
 
 def knock_uds(message='0303030303'):
+
+    uds_address = config.get('paths','uds_address')
 
 # Create a UDS socket
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
