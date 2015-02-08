@@ -133,3 +133,41 @@ def knock_uds(message='0303030303'):
     finally:
         print >>sys.stderr, 'closing socket'
         sock.close()
+
+
+
+
+def update_access():
+
+    jsonfile = config.get('paths','json_file');
+
+    target = config.get('url','acl_download');
+
+    tempfile, headers = urllib.urlretrieve(target)
+
+    temp_data=open(tempfile)
+    worked = True
+
+    try:
+        data = json.load(temp_data)
+    except:
+        worked = False
+
+    if worked:
+        if ( not( filecmp.cmp(tempfile,jsonfile))):
+            # The files differ.
+            print "Differ..."
+            stamp = datetime.datetime.now().strftime("_%Y-%m-%d-%H:%M:%S");
+            print stamp;
+            oldfname = jsonfile + stamp;
+            shutil.move(jsonfile,oldfname)
+            shutil.move(tempfile,jsonfile)
+            my_logger.info("hackerdoor: New access list installed")
+
+
+    else:
+        print "Failed!"
+
+
+    
+    
