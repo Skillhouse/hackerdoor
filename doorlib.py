@@ -169,8 +169,15 @@ def update_access():
     except:
         worked = False
 
+
+    
+
     if worked:
-        if ( not( filecmp.cmp(tempfile,jsonfile))):
+        if not os.path.exists(jsonfile):
+            my_logger.info("hackerdoor: access list was empty; New access list installed")
+            shutil.move(tempfile,jsonfile)
+
+        elif ( not( filecmp.cmp(tempfile,jsonfile))):
             # The files differ.
             print "Differ..."
             stamp = datetime.datetime.now().strftime("_%Y-%m-%d-%H:%M:%S");
@@ -179,7 +186,9 @@ def update_access():
             shutil.move(jsonfile,oldfname)
             shutil.move(tempfile,jsonfile)
             my_logger.info("hackerdoor: New access list installed")
-
+        else:
+            # The new download and the existing one are identical.  
+            #  No action necessary.
 
     else:
         print "Failed!"
