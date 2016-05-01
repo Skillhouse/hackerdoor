@@ -10,7 +10,7 @@ import sys, serial, select
 class Arduino() :
     def run(self, baud=9600) :
         # Port may vary, so look for it:
-        baseports = ['/dev/ttyACM0','/dev/ttyUSB', '/dev/ttyACM']
+        baseports = ['/dev/ttyAMA0','/dev/ttyUSB', '/dev/ttyACM']
         self.ser = None
         for baseport in baseports :
             if self.ser : break
