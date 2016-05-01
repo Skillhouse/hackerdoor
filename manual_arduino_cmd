@@ -1,0 +1,78 @@
+#! /usr/bin/env python
+#
+# This uses a mux_server.py (from mux_serial) on the localhost to run a
+# commmand and prints out the next line it sees, this may not be the
+# output of the command you requested if the arduino gets distracted
+#
+#	-- Daniel Frederick Crisman
+#	MIT license 2016
+#
+
+import os, sys
+import socket
+import optparse
+
+
+# Option parsing, duh
+parser = optparse.OptionParser()
+
+parser.add_option('-p', '--port',
+				help = 'Host port',
+				dest = 'port',
+				type = 'int',
+				default = 23200)
+parser.add_option('-c', '--command',
+				help = 'Command to send',
+				dest = 'cmd',
+				type = 'string')
+
+(opts, args) = parser.parse_args()
+
+
+# Setup client
+server_address = ('localhost', opts.port)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(server_address)
+
+# format command for the on wire serial format we use
+if opts.cmd[0] != '(':
+	opts.cmd = '(' + opts.cmd
+if opts.cmd[-1] != ')':
+	opts.cmd += ')'
+opts.cmd = opts.cmd.upper()
+
+
+print >>sys.stderr, 'MUX > Connected to %s:%d' % server_address
+print >>sys.stderr, 'MUX > Use ctrl+c to stop...\n'
+print >>sys.stderr, 'MUX > Command is "%s"\n' % opts.cmd
+
+
+current_line = ''
+
+s.send(opts.cmd)
+
+##### MAIN
+while True:
+	try:
+		# Read 1 char
+		x = s.recv(1)
+
+		# Ignore carriage returns
+		if x == '\r':
+			continue
+
+		current_line += x
+
+		if x == '\n':
+                        print current_line
+			current_line = ''
+			break
+
+	except:
+		break
+
+print >>sys.stderr, '\nMUX > Closing...'
+
+s.close()
+
+print >>sys.stderr, 'MUX > Done! =)'
