@@ -36,6 +36,22 @@ handler = logging.handlers.SysLogHandler(address = '/dev/log')
 my_logger.addHandler(handler)
 
 
+def make_paths():
+    # Make the directories if we don't already have them.
+    #
+    #
+    
+    if not os.path.exists(config.get('paths','rootdir')):
+        my_logger.info("hackerdoor: created root working directory '{0}'  ".format(config.get('paths','rootdir')))
+        os.makedirs(config.get('paths','rootdir'))
+
+
+    if not os.path.exists(config.get('paths','json_dir')):
+        my_logger.info("hackerdoor: created JSON directory '{0}'  ".format(config.get('paths','json_dir')))
+        os.makedirs(config.get('paths','json_dir'))
+        
+
+
 def read_acl():
     for version in [0]:
         json_file = config.get('paths','json_file')
