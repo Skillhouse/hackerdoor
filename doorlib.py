@@ -187,6 +187,7 @@ def update_access():
             shutil.move(tempfile,jsonfile)
             my_logger.info("hackerdoor: New access list installed")
         else:
+            pass
             # The new download and the existing one are identical.  
             #  No action necessary.
 
