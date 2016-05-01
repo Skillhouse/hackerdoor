@@ -34,7 +34,8 @@ class Arduino() :
             inp, outp, err = select.select([sys.stdin, self.ser], [], [], .2)
             # Check for user input:
             if sys.stdin in inp :
-                line = sys.stdin.readline()
+		# the nano Arduino code does not deal with NL and/or CR, strip it out
+                line = sys.stdin.readline().strip()
                 self.ser.write(line)
             # check for Arduino output:
             if self.ser in inp :
