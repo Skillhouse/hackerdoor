@@ -25,6 +25,12 @@ class GHCard:
         self.fc = facilityCode
         self.cc = cardCode
 
+    def __eq__( self, other ):
+        if type(self) is type(other):
+            return self.facility == other.facility and self.card == other.card
+        else:
+            return False
+
 class GHACL:
     acl = None
 
@@ -33,9 +39,11 @@ class GHACL:
             acl = []
         self.acl = acl
 
-    def add( card ):
+    def add( self,  card ):
         self.acl.append( card )
 
-    def deltaListTo( gold ):
-        for card in gold.acl
+    def deltaListTo( self, gold ):
+        for card in gold.acl:
+            for old in self.acl:
+                if card == old:
         
