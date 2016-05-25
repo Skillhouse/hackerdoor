@@ -43,7 +43,31 @@ class GHACL:
         self.acl.append( card )
 
     def deltaListTo( self, gold ):
-        for card in gold.acl:
-            for old in self.acl:
-                if card == old:
-        
+        add = []
+        # n is new card
+        for n in gold.acl:
+            # o is old
+            newCard = True
+            for o in self.acl:
+                # if o.done == True: # WTF? duplicate new card data in gold? XXX
+                # How generate error here
+                if n == o:
+                    newCard = False
+                    if o.access != n.access:
+                        if n.access:
+                            o.set_denied = True
+                        else:
+                            o.set_allowed = True
+                    else:
+                        o.no_change = True
+                n.done = True
+                o.done = True
+            if newCard and n.access:
+                n.done = True
+                add.append( n )
+        for o in self.acl:
+            if o.done:
+                continue
+            if o.access:
+                # no card matched in new ACL list, disable it
+                o.set_denied = True
