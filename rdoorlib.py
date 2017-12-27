@@ -35,6 +35,9 @@ class GHCard:
         else:
             return False
 
+    def __hash__( self ):
+        return hash((self.fc,self.cc))
+
 class GHACL:
     acl = None
     # start location fo the ACL list on nan0
