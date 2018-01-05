@@ -3,17 +3,11 @@ import httplib2
 
 from apiclient import discovery
 from oauth2client import client
-from oauth2client import tools
 from oauth2client.file import Storage
 
 from oauth2client.service_account import ServiceAccountCredentials
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
-
+from pprint import pprint
 
 ### Created from the sample Google Sheet API tutorial.
 def main():
@@ -31,7 +25,7 @@ def main():
     # The Memberlist Google Doc
     spreadsheetId = '1sakXpA_H5vs3_addWkrPbccDVcoxFx13yDpudYlqInM'
 
-    rangeName = 'MasterMemberList!B3:C'
+    rangeName = 'HackerdoorView!A2:E'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
@@ -39,10 +33,13 @@ def main():
     if not values:
         print('No data found.')
     else:
-        print('Name, Status:')
+        # Dec is the decimal equivalent of FC+CC
+        # With Google Sheets, if a cell is empty, no data is returned for that column
+        # So the row object may contain between 1 and 5 columns, we'll have to deal with None's.
+        print('Name, Status, Card FC, Card CC, Card Dec:')
         for row in values:
-            print('%s, %s' % (row[0], row[1]))
-
+            pprint(row)
+            
 
 if __name__ == '__main__':
     main()
