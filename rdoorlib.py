@@ -93,10 +93,13 @@ class GHACL:
                 # no card matched in new ACL list, disable it
                 denied = old.loc
                 old.set_denied = True
-        # how to figure out what the spare record spaces at the end are?
-        # find the new record spots at the end for the add list to get locations from
+        if not allowed and not denied and not add:
+            # no changes are needed
+            return None
         ## loop on allowed for set access.0 = 1
         ## loop on denied for set access.0 = 0
+        # how to figure out what the spare record spaces at the end are?
+        # find the new record spots at the end for the add list to get locations from
         ## loop on add list to create calls for adding them
         ## add set acl_end if we need more space
             ## add spaceholder values for the last bit of the ACL list if we add extra allocations at the end
