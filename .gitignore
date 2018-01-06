@@ -54,3 +54,6 @@ docs/_build/
 
 # Emacs backup files.
 *~
+
+#Configs directory
+configs/
