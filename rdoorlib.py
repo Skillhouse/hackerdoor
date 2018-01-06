@@ -95,7 +95,8 @@ class GHACL:
                 o.set_denied = True
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
-        ## loop on self.acl to find items with set_denied/allowed to create calls for
+        ## loop on allowed for set access.0 = 1
+        ## loop on denied for set access.0 = 0
         ## loop on add list to create calls for adding them
         ## add set acl_end if we need more space
             ## add spaceholder values for the last bit of the ACL list if we add extra allocations at the end
