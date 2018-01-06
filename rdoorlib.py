@@ -59,33 +59,39 @@ class GHACL:
         self.acl.append( card )
 
     def deltaListTo( self, gold ):
+        s_card = {k:k for k in self.acl}
+        seen = {}
         add = []
+        denied = []
+        allowed = []
         # n is new card
         for n in gold.acl:
-            # o is old
-            newCard = True
-            for o in self.acl:
-                # if o.done == True: # WTF? duplicate new card data in gold? XXX
-                # How generate error here
-                if n == o:
-                    newCard = False
-                    if o.access != n.access:
-                        if n.access:
-                            o.set_denied = True
-                        else:
-                            o.set_allowed = True
+            if n in seen:
+                pass # WTF? duplicate new card data in gold? XXX
+            seen[n] = 1
+            new_card = True
+            if n in s_card:
+                o = s_card[n]
+                new_card = False
+                if n.allowed != o.allowed:
+                    if n.allowed:
+                        o.set_allowed = True
+                        allowed = o.loc
                     else:
-                        o.no_change = True
-                n.done = True
+                        o.set_denied = True
+                        denied = o.loc
                 o.done = True
-            if newCard and n.access:
-                n.done = True
-                add.append( n )
+            else:
+                # not neccessarily will it have allowed set
+                # we also keep track of cards that may not get in
+                add.append(n)
+            n.done = True
         for o in self.acl:
             if o.done:
                 continue
-            if o.access:
+            if o.allowed:
                 # no card matched in new ACL list, disable it
+                denied = o.loc
                 o.set_denied = True
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
