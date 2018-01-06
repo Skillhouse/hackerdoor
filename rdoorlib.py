@@ -6,6 +6,7 @@
 class GHCard:
     # This is the attribute byte, but only item defined is bit 0 == 1 is access allowed, 0 is denied
     access = None
+    allowed = False # this is boolean from bit 0 of access
     # facility code (FC)
     fc = None
     # card code (CC)
@@ -28,6 +29,8 @@ class GHCard:
         self.fc = facilityCode
         self.cc = cardCode
         self.loc = location
+        # XXX need logic here
+        self.allowed = False
 
     def __eq__( self, other ):
         if type(self) is type(other):
