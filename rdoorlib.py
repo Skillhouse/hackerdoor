@@ -64,35 +64,35 @@ class GHACL:
         add = []
         denied = []
         allowed = []
-        # n is new card
-        for n in gold.acl:
-            if n in seen:
+
+        for new in gold.acl:
+            if new in seen:
                 pass # WTF? duplicate new card data in gold? XXX
             seen[n] = 1
             new_card = True
-            if n in s_card:
-                o = s_card[n]
+            if new in s_card:
+                old = s_card[new]
                 new_card = False
-                if n.allowed != o.allowed:
-                    if n.allowed:
-                        o.set_allowed = True
-                        allowed = o.loc
+                if new.allowed != old.allowed:
+                    if new.allowed:
+                        old.set_allowed = True
+                        allowed = old.loc
                     else:
-                        o.set_denied = True
-                        denied = o.loc
-                o.done = True
+                        old.set_denied = True
+                        denied = old.loc
+                old.done = True
             else:
                 # not neccessarily will it have allowed set
                 # we also keep track of cards that may not get in
-                add.append(n)
-            n.done = True
-        for o in self.acl:
-            if o.done:
+                add.append(new)
+            new.done = True
+        for old in self.acl:
+            if old.done:
                 continue
-            if o.allowed:
+            if old.allowed:
                 # no card matched in new ACL list, disable it
-                denied = o.loc
-                o.set_denied = True
+                denied = old.loc
+                old.set_denied = True
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
         ## loop on allowed for set access.0 = 1
