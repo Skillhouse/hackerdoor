@@ -1,0 +1,2 @@
+class MissingCardError(Exception):
+    pass

@@ -29,7 +29,7 @@ Requires a configs/hackerdoor-servicecredentials.json file containing the Servic
 
 ### Running
 
-Simply call `python googleapi/memberlist.py` to run the small script. It will pull the current active member members and their card information, such as:
+Simply call `python -m googleapi.memberlist` to run the small script. It will pull the current active member members and their card information, such as:
 
 ```
 Name, Status, FC, CC, Dec
@@ -38,3 +38,13 @@ Margert Maker, ACTIVE, 00, 11, 000004567
 ```
 
 The FC, CC, and DEC are components of the card number. The DEC is the decimal equivalent of the FC and CC values.
+
+### Unit Tests
+
+Unit Tests are written using the standard library unittest, and can be ran be using the following command
+
+```
+python -m unittest discover -v  -p "*test.py"
+```
+
+The naming convention for test files in this project is `foo_test.py`. By default, python's unittest uses a nameing convention of `test_foo.py`, but that moves test files away from the modules they are meant to be testing, so a different convention has been choosen.
