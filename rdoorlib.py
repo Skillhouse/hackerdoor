@@ -1,6 +1,63 @@
 
 # vim:ft=python:ai:expandtab:ts=4:
 
+import socket
+import re
+import time
+
+class GHMUX:
+    port = 23200
+    server ='localhost'
+    mux = None
+    letter_re = {}
+    letter_re['k'] = re.compile( re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ')
+        + r'\r*\n"[A-F0-9]{2}", "[A-F0-9]{4}", "[A-F0-9]{2}", "[A-F0-9]{6}"\r*\n'
+        )
+
+    def __init__(self, port=None, server=None):
+        if port is not None:
+            self.port = port
+        if server is not None:
+            self.server = server
+
+    def connect(self):
+        server_address = (self.server, self.port)
+        self.mux = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.mux.connect(server_address)
+
+    def close(self):
+        self.mux.shutdown(socket.SHUT_RDWR)
+        self.mux.close()
+
+    def run(self, wait=1, letter='k', options='00', cycle=3):
+        self.connect()
+        # format for command is (A###) where ### is a options string
+        # based on what letter command is being used
+        command = '(' + letter + options + ')'
+        command = command.upper()
+        self.mux.send(command.encode())
+        result = ''
+        print(self.letter_re.keys())
+        for count in range(cycle):
+            # need a timeout something here
+            recieved = self.mux.recv(2048)
+            result += recieved.decode()
+            print('MAN')
+            print(result)
+            print('END')
+            if (self.letter_re[letter].match(result)):
+                print('GREGGREG')
+                print(result)
+                print('FREDFRED')
+                self.close()
+                return result
+            time.sleep(wait)
+        self.close()
+        return None
+
+    def add(self, attribute, facility_code, card_code)
+        pass
+        # call run(letter='v', options= attribute+facility_code+card_code
 
 
 class GHCard:
