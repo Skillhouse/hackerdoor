@@ -9,10 +9,15 @@ class GHMUX:
     port = 23200
     server ='localhost'
     mux = None
+    # re strings to build up patterns from
+    #   matching the third (release) version of HSDC-0.1.0.5.ino
+    res_acl_header = re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ') + r'\r*\n'
+    res_acl_data = r'"(?P<index>[A-F0-9]{2})", "(?P<addr>[A-F0-9]{4})", "(?P<attribute>[A-F0-9]{2})", "(?P<card_num>(?P<facilty_code>[A-F0-9]{2})(?P<card_code>[A-F0-9]{4}))"\r*\n'
+    res_acl = res_acl_header + res_acl_data
+
+    # re to match the various command return values
     letter_re = {}
-    letter_re['k'] = re.compile( re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ')
-        + r'\r*\n"[A-F0-9]{2}", "[A-F0-9]{4}", "[A-F0-9]{2}", "[A-F0-9]{6}"\r*\n'
-        )
+    letter_re['k'] = re.compile(res_acl)
 
     def __init__(self, port=None, server=None):
         if port is not None:
