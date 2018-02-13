@@ -52,7 +52,7 @@ class GHMUX:
         self.mux.shutdown(socket.SHUT_RDWR)
         self.mux.close()
 
-    def run(self, wait=1, letter='k', options='00', cycle=3, timeout=0.1):
+    def run(self, wait=0.1, letter='k', options='00', cycle=3, timeout=0.1):
         self.connect()
         # set a (normally smaller) timeout for all the send/recv we will do
         self.mux.settimeout(timeout)
@@ -64,7 +64,7 @@ class GHMUX:
         result = ''
         print(self.letter_re.keys())
         for count in range(cycle):
-            # need a timeout something here
+            # do what if recv raises a timeout, catch it?, not?
             recieved = self.mux.recv(2048)
             result += recieved.decode()
             print('MAN')
