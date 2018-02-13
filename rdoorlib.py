@@ -74,12 +74,13 @@ class GHMUX:
             #   it might be garbage or the output from the next whatever
             #   all the letter_re should be designed to match (start anchored)
             #   open ended regular expressions
-            if (self.letter_re[letter].match(result)):
+            matched = self.letter_re[letter].match(result)
+            if matched:
                 print('GREGGREG')
                 print(result)
                 print('FREDFRED')
                 self.close()
-                return result
+                return matched
             time.sleep(wait)
         self.close()
         return None
