@@ -23,12 +23,16 @@ class GHMUX:
     res_list_header = res_list_header_a + res_list_header_b + r'[ ]\r*\n'
     res_list_footer = r'[ ]\r*\n End printing of ACL List \r*\n'
     res_list = res_list_header + r'(?:' + res_acl + r')*' + res_list_footer
+    # from aclAtt()
+    res_att_header = r'Set Attribute of Record \d+ at address \d+\r*\n'
+    res_att = res_att_header + res_acl
 
     # re to match the various command return values
     letter_re = {}
     letter_re['k'] = re.compile(res_acl)
     letter_re['j'] = letter_re['k']
     letter_re['v'] = letter_re['k']
+    letter_re['q'] = re.compile(res_att)
     letter_re['s'] = re.compile(res_list)
 
     def __init__(self, port=None, server=None):
