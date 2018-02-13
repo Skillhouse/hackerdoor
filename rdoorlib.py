@@ -11,13 +11,25 @@ class GHMUX:
     mux = None
     # re strings to build up patterns from
     #   matching the third (release) version of HSDC-0.1.0.5.ino
+    #
+    # from readACL()
     res_acl_header = re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ') + r'\r*\n'
+    # from printACLR()
     res_acl_data = r'"(?P<index>[A-F0-9]{2})", "(?P<addr>[A-F0-9]{4})", "(?P<attribute>[A-F0-9]{2})", "(?P<card_num>(?P<facilty_code>[A-F0-9]{2})(?P<card_code>[A-F0-9]{4}))"\r*\n'
     res_acl = res_acl_header + res_acl_data
+    # from printAllAclRecords()
+    res_list_header_a = r'(?:[ ]\r*\n){2} Start printing of ACL List \r*\n \r*\n'
+    res_list_header_b = re.escape(r' Format in Hex = Record #, EEProm Address, Attribute, Card code  ')
+    res_list_header = res_list_header_a + res_list_header_b + r'[ ]\r*\n'
+    res_list_footer = r'[ ]\r*\n End printing of ACL List \r*\n'
+    res_list = res_list_header + r'(?:' + res_acl + r')*' + res_list_footer
 
     # re to match the various command return values
     letter_re = {}
     letter_re['k'] = re.compile(res_acl)
+    letter_re['j'] = letter_re['k']
+    letter_re['v'] = letter_re['k']
+    letter_re['s'] = re.compile(res_list)
 
     def __init__(self, port=None, server=None):
         if port is not None:
