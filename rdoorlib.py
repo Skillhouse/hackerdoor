@@ -23,14 +23,18 @@ class GHMUX:
     def connect(self):
         server_address = (self.server, self.port)
         self.mux = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # this should be connecting to localhost, so aggressive timeout
+        self.mux.settimeout(1.0)
         self.mux.connect(server_address)
 
     def close(self):
         self.mux.shutdown(socket.SHUT_RDWR)
         self.mux.close()
 
-    def run(self, wait=1, letter='k', options='00', cycle=3):
+    def run(self, wait=1, letter='k', options='00', cycle=3, timeout=0.1):
         self.connect()
+        # set a (normally smaller) timeout for all the send/recv we will do
+        self.mux.settimeout(timeout)
         # format for command is (A###) where ### is a options string
         # based on what letter command is being used
         command = '(' + letter + options + ')'
@@ -45,6 +49,10 @@ class GHMUX:
             print('MAN')
             print(result)
             print('END')
+            # NOTE: we are explicitly not caring about any trailing stuff
+            #   it might be garbage or the output from the next whatever
+            #   all the letter_re should be designed to match (start anchored)
+            #   open ended regular expressions
             if (self.letter_re[letter].match(result)):
                 print('GREGGREG')
                 print(result)
