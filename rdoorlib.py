@@ -21,7 +21,7 @@ class GHMUX:
     # from printAllAclRecords()
     res_list_header_a = r'(?:[ ]\r*\n){2} Start printing of ACL List \r*\n \r*\n'
     res_list_header_b = re.escape(r' Format in Hex = Record #, EEProm Address, Attribute, Card code  ')
-    res_list_header = res_list_header_a + res_list_header_b + r'[ ]\r*\n'
+    res_list_header = res_list_header_a + res_list_header_b + r'\r*\n[ ]\r*\n'
     res_list_footer = r'[ ]\r*\n End printing of ACL List \r*\n'
     res_list = res_list_header + r'(?:' + res_acl + r')*' + res_list_footer
     # from aclAtt()
