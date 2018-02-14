@@ -62,23 +62,16 @@ class GHMUX:
         command = command.upper()
         self.mux.send(command.encode())
         result = ''
-        print(self.letter_re.keys())
         for count in range(cycle):
             # do what if recv raises a timeout, catch it?, not?
             recieved = self.mux.recv(2048)
             result += recieved.decode()
-            print('MAN')
-            print(result)
-            print('END')
             # NOTE: we are explicitly not caring about any trailing stuff
             #   it might be garbage or the output from the next whatever
             #   all the letter_re should be designed to match (start anchored)
             #   open ended regular expressions
             matched = self.letter_re[letter].match(result)
             if matched:
-                print('GREGGREG    got it')
-                print(result)
-                print('FREDFRED')
                 self.close()
                 return matched
             time.sleep(wait)
