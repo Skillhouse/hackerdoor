@@ -76,7 +76,7 @@ class GHMUX:
             #   open ended regular expressions
             matched = self.letter_re[letter].match(result)
             if matched:
-                print('GREGGREG')
+                print('GREGGREG    got it')
                 print(result)
                 print('FREDFRED')
                 self.close()
@@ -85,7 +85,7 @@ class GHMUX:
         self.close()
         return None
 
-    def add(self, attribute, facility_code, card_code)
+    def add(self, attribute, facility_code, card_code):
         pass
         # call run(letter='v', options= attribute+facility_code+card_code
 
