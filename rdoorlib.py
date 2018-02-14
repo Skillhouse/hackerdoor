@@ -4,6 +4,7 @@
 import socket
 import re
 import time
+import select
 
 class GHMUX:
     port = 23200
@@ -63,9 +64,12 @@ class GHMUX:
         self.mux.send(command.encode())
         result = ''
         for count in range(cycle):
-            # do what if recv raises a timeout, catch it?, not?
-            recieved = self.mux.recv(2048)
-            result += recieved.decode()
+            rlist, _, _ = select.select([self.mux], [], [], 0.1)
+            if rlist:
+                print('recv')
+                # do what if recv raises a timeout, catch it?, not?
+                recieved = self.mux.recv(2048)
+                result += recieved.decode()
             # NOTE: we are explicitly not caring about any trailing stuff
             #   it might be garbage or the output from the next whatever
             #   all the letter_re should be designed to match (start anchored)
