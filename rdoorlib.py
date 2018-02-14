@@ -66,7 +66,6 @@ class GHMUX:
         for count in range(cycle):
             rlist, _, _ = select.select([self.mux], [], [], 0.1)
             if rlist:
-                print('recv')
                 # do what if recv raises a timeout, catch it?, not?
                 recieved = self.mux.recv(2048)
                 result += recieved.decode()
