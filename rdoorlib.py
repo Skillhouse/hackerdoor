@@ -23,7 +23,7 @@ class GHMUX:
     res_list_header_b = re.escape(r' Format in Hex = Record #, EEProm Address, Attribute, Card code  ')
     res_list_header = res_list_header_a + res_list_header_b + r'\r*\n[ ]\r*\n'
     res_list_footer = r'[ ]\r*\n End printing of ACL List \r*\n'
-    res_list = res_list_header + r'(?:' + res_acl + r')*' + res_list_footer
+    res_list = res_list_header + r'(?P<acl_list>(?:' + res_acl + r')*)' + res_list_footer
     # from aclAtt()
     res_att_header = r'Set Attribute of Record \d+ at address \d+\r*\n'
     res_att = res_att_header + res_acl
@@ -85,6 +85,14 @@ class GHMUX:
         pass
         # call run(letter='v', options= attribute+facility_code+card_code
 
+    def acl_list(self):
+        match = self.run(letter='s', options='', wait=0.5, cycle=30)
+        acls = match.group('acl_list')
+        for acl in re.finditer(self.res_acl, acls):
+            print(' - '.join((acl.group('index'), acl.group('addr'), acl.group('attribute'), acl.group('card_num'))))
+        # parts of card_num:
+        #   facilty_code
+        #   card_code
 
 class GHCard:
     # This is the attribute byte, but only item defined is bit 0 == 1 is access allowed, 0 is denied
