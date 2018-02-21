@@ -117,8 +117,14 @@ class GHCard:
 
     def __init__( self, access, facilityCode, cardCode, location=None ):
         self.access = access
-        self.fc = facilityCode
-        self.cc = cardCode
+        if re.match(r'\A[0-9a-fA-F]{2}\z', facilityCode):
+            self.fc = facilityCode.upper()
+        else:
+            raise("facilityCode was not a two character hexadecimal number")
+        if re.match(r'\A[0-9a-fA-F]{4}\z', cardCode):
+            self.cc = cardCode.upper()
+        else:
+            raise("cardCode was not a four character hexadecimal number")
         self.loc = location
         # XXX need logic here
         self.allowed = False
