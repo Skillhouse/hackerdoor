@@ -165,7 +165,7 @@ class GHACL:
         for new in gold.acl:
             if new in seen:
                 pass # WTF? duplicate new card data in gold? XXX
-            seen[n] = 1
+            seen[new] = 1
             new_card = True
             if new in s_card:
                 old = s_card[new]
