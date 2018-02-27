@@ -96,11 +96,11 @@ class GHMUX:
 
 class GHCard:
     # This is the attribute byte, but only item defined is bit 0 == 1 is access allowed, 0 is denied
-    access = None
-    allowed = False # this is boolean from bit 0 of access
-    # facility code (FC)
+    attribute = '00'    # 2 digit hex number as string
+    allowed = False # this is boolean from bit 0 of attribute
+    # facility code (FC) 2 digit hex number as string
     fc = None
-    # card code (CC)
+    # card code (CC) 4 digit hex number as string
     cc = None
 
     # location in memory on the nano
@@ -115,19 +115,27 @@ class GHCard:
     # if processed in new ACL list
     done = False
 
-    def __init__( self, access, facilityCode, cardCode, location=None ):
-        self.access = access
+    def __init__( self, facilityCode, cardCode, location=None, allowed=None, attribute=None ):
+        if attribute is not None:
+            if re.match(r'\A[0-9a-fA-F]{2}\Z', str(attribute)):
+                self.attribute = attribute.upper()
+            else:
+                raise(Exception("attribute was not a two character hexadecimal string"))
+            self.attribute = attribute
         if re.match(r'\A[0-9a-fA-F]{2}\Z', str(facilityCode)):
             self.fc = facilityCode.upper()
         else:
-            raise(Exception("facilityCode was not a two character hexadecimal number"))
+            raise(Exception("facilityCode was not a two character hexadecimal string"))
         if re.match(r'\A[0-9a-fA-F]{4}\Z', str(cardCode)):
             self.cc = cardCode.upper()
         else:
-            raise(Exception("cardCode was not a four character hexadecimal number"))
+            raise(Exception("cardCode was not a four character hexadecimal string"))
         self.loc = location
-        # XXX need logic here
         self.allowed = False
+        if allowed is not None:
+            if self.allowed:
+                self.allowed = True
+                self.attribute = '01'; # this will need to change if we define more bits in attribute
 
     def __eq__( self, other ):
         if type(self) is type(other):
