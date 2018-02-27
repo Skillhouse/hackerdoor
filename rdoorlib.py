@@ -167,8 +167,8 @@ class GHACL:
         s_card = {k:k for k in self.acl}
         seen = {}
         add = []
-        denied = []
-        allowed = []
+        to_deny = []
+        to_allow = []
 
         for new in gold.acl:
             if new in seen:
@@ -181,10 +181,10 @@ class GHACL:
                 if new.allowed != old.allowed:
                     if new.allowed:
                         old.set_allowed = True
-                        allowed = old.loc
+                        to_allow = old.loc
                     else:
                         old.set_denied = True
-                        denied = old.loc
+                        to_deny = old.loc
                 old.done = True
             else:
                 # not neccessarily will it have allowed set
@@ -196,13 +196,13 @@ class GHACL:
                 continue
             if old.allowed:
                 # no card matched in new ACL list, disable it
-                denied = old.loc
+                to_deny = old.loc
                 old.set_denied = True
-        if not allowed and not denied and not add:
+        if not to_allow and not to_deny and not add:
             # no changes are needed
             return None
-        ## loop on allowed for set access.0 = 1
-        ## loop on denied for set access.0 = 0
+        ## loop on to_allow for set attribute.0 = 1
+        ## loop on to_deny for set attribute.0 = 0
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
         ## loop on add list to create calls for adding them
