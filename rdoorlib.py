@@ -114,6 +114,8 @@ class GHCard:
 
     # location in memory on the nano
     loc = None
+    # index of ACL in memory on the nano
+    index = None
 
     # name so we can log better, not stored on Arduino
     name = ''
@@ -127,7 +129,14 @@ class GHCard:
     # if processed in new ACL list
     done = False
 
-    def __init__( self, facilityCode, cardCode, location=None, allowed=None, attribute=None, name=None ):
+    def __init__( self, facilityCode, cardCode, location=None, allowed=None,
+        attribute=None, name=None, index = None ):
+        if index is not None:
+            if re.match(r'\A[0-9a-fA-F]{2}\Z', str(index)):
+                self.index = index.upper()
+            else:
+                raise(Exception("attribute was not a two character hexadecimal string"))
+            self.attribute = attribute
         if name is not None:
             # TODO strip name down to 'safe' characters set for clean logging?
             #   e.g. [a-zA-Z0-9 ._'-]
