@@ -88,11 +88,20 @@ class GHMUX:
     def acl_list(self):
         match = self.run(letter='s', options='', wait=0.5, cycle=30)
         acls = match.group('acl_list')
+        out = []
         for acl in re.finditer(self.res_acl, acls):
-            print(' - '.join((acl.group('index'), acl.group('addr'), acl.group('attribute'), acl.group('card_num'))))
+            out.append({
+                'index': acl.group('index'),
+                'addr': acl.group('addr'),
+                'attribute': acl.group('attribute'),
+                'facility_code': acl.group('facility_code'),
+                'card_code': acl.group('card_code'),
+                'card_num': acl.group('card_num'),
+                })
         # parts of card_num:
-        #   facilty_code
+        #   facility_code
         #   card_code
+        return out
 
 class GHCard:
     # This is the attribute byte, but only item defined is bit 0 == 1 is access allowed, 0 is denied
