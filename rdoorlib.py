@@ -16,7 +16,7 @@ class GHMUX:
     # from readACL()
     res_acl_header = re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ') + r'\r*\n'
     # from printACLR()
-    res_acl_data = r'"(?P<index>[A-F0-9]{2})", "(?P<addr>[A-F0-9]{4})", "(?P<attribute>[A-F0-9]{2})", "(?P<card_num>(?P<facilty_code>[A-F0-9]{2})(?P<card_code>[A-F0-9]{4}))"\r*\n'
+    res_acl_data = r'"(?P<index>[A-F0-9]{2})", "(?P<addr>[A-F0-9]{4})", "(?P<attribute>[A-F0-9]{2})", "(?P<card_num>(?P<facility_code>[A-F0-9]{2})(?P<card_code>[A-F0-9]{4}))"\r*\n'
     res_acl = res_acl_header + res_acl_data
     # from printAllAclRecords()
     res_list_header_a = r'(?:[ ]\r*\n){2} Start printing of ACL List \r*\n \r*\n'
