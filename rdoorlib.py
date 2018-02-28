@@ -189,7 +189,7 @@ class GHACL:
     def add( self,  card ):
         self.acl.append( card )
 
-    def deltaListTo( self, gold ):
+    def delta_list_to( self, gold ):
         s_card = {k:k for k in self.acl}
         seen = {}
         add = []
