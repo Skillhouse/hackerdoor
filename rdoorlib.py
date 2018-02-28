@@ -106,6 +106,9 @@ class GHCard:
     # location in memory on the nano
     loc = None
 
+    # name so we can log better, not stored on Arduino
+    name = ''
+
     # if new ACL list says we are denied
     set_denied = False
     # if new ACL list says we are allowed
@@ -115,7 +118,12 @@ class GHCard:
     # if processed in new ACL list
     done = False
 
-    def __init__( self, facilityCode, cardCode, location=None, allowed=None, attribute=None ):
+    def __init__( self, facilityCode, cardCode, location=None, allowed=None, attribute=None, name=None ):
+        if name is not None:
+            # TODO strip name down to 'safe' characters set for clean logging?
+            #   e.g. [a-zA-Z0-9 ._'-]
+            # this is silly, but I don't want newlines (for example) to end up in log lines
+            self.name = name
         if attribute is not None:
             if re.match(r'\A[0-9a-fA-F]{2}\Z', str(attribute)):
                 self.attribute = attribute.upper()
