@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
 from googleapi.memberlist import get_memberlist
-from pprint import pprint
+from rdoorlib import GHCard,GHACL,GHMUX
 
-# Created from the sample Google Sheet API tutorial.
-def main():
+def get_sheets_acl():
     values = get_memberlist()
 
     if not values:
         raise(Exception('No data found.'))
     else:
+        new_acl = GHACL()
         # Dec is the decimal equivalent of FC+CC
         # With Google Sheets, if a cell is empty, no data is returned for that column
         # So the row object may contain between 1 and 5 columns, we'll have to deal with None's.
-        print('Name, Status, Card FC, Card CC, Card Dec:')
+        # order on sheet is 'Name, Status, Card FC, Card CC, Card Dec:'
         for row in values:
             is_active = False
             fc = 0
@@ -48,8 +48,14 @@ def main():
                 print("We don't believe in edge cases",
                     "all zeros or all ones on fc/cc for '{}'".format(name))
                 continue
-            pprint((name,is_active,fc,cc,dec))
+            #print((name,is_active,fc,cc,dec))
+            new_acl.add(GHCard(fc,cc,name=name,allowed=is_active))
 
+        return new_acl
+
+def main():
+    sheets = get_sheets_acl()
+    print(sheets)
 
 if __name__ == '__main__':
     main()
