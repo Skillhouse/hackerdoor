@@ -151,8 +151,8 @@ class GHCard:
             if re.match(r'\A[0-9a-fA-F]{2}\Z', str(index)):
                 self.index = index.upper()
             else:
-                raise(Exception("attribute was not a two character hexadecimal string"))
-            self.attribute = attribute
+                raise(Exception("index was not a two character hexadecimal string"))
+            self.index = index
         if name is not None:
             # TODO strip name down to 'safe' characters set for clean logging?
             #   e.g. [a-zA-Z0-9 ._'-]
