@@ -85,6 +85,13 @@ class GHMUX:
         pass
         # call run(letter='v', options= attribute+facility_code+card_code
 
+    def read_address(self, addr):
+        address = str(addr)
+        if not re.match(r'\A[0-9a-fA-F]{4}\Z', address):
+            raise(Exception("read() address is not a 4 digit hexadecimal string"))
+        match = self.run(letter='o', options=address)
+        # and unpack
+
     def acl_list(self):
         match = self.run(letter='s', options='', wait=0.5, cycle=30)
         acls = match.group('acl_list')
