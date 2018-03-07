@@ -266,10 +266,9 @@ class GHACL:
         ## loop on to_deny for set attribute.0 = 0
         for index in to_deny:
             door.set_attribute(index,'00')
-        # how to figure out what the spare record spaces at the end are?
-        # find the new record spots at the end for the add list to get locations from
-        ## loop on add list to create calls for adding them
-        ## add set acl_end if we need more space
-            ## add spaceholder values for the last bit of the ACL list if we add extra allocations at the end
 
-        ## loop and run all the calls to the nano
+        # ignore any pre-loading of space in the ACL list, just use "V" to add at end
+        ## loop on add list to create calls for adding them
+        for card in add:
+            door.add(card.attribute, card.fc, card.cc)
+
