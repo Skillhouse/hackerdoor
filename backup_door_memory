@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+from rdoorlib import GHCard,GHACL,GHMUX
+import json
+
+def get_door_acl(door):
+    acll = []
+    acl_list = door.acl_list()
+    if len(acl_list) == 0:
+        raise(Exception('No ACL list from door controller'))
+    for acl in acl_list:
+        acll.append(acl)
+    return acll
+
+def main():
+    door = GHMUX()
+
+    data = dict()
+
+    data['acl'] = get_door_acl(door)
+    for address in ( '0000', '0010' ):
+        data[address] = door.read_address(address)
+
+    # sanity checks
+    # we only read_address 0000-0001F so acl_list should cover 0020 and on
+    if str(data['0000'][0]) != '00' or str(data['0000'][1]) != '20':
+        raise(Exception('Unexpected, ACL start is not 0020'))
+    # as above, the first ACL should show 0020 as address
+    if str(data['acl'][0]['addr']) != '0020':
+        raise(Exception('Unexpected, address of first ACL is not 0020'))
+    # the ACL_end value (bytes 2 & 3) should be the first ACL after the end
+    # offset of 4 from the last ACL's addr
+    if int(data['acl'][-1]['addr'], base=16) + 4 != int(data['0000'][2] + data['0000'][3], base=16):
+        raise(Exception('Unexpected, address of last ACL does not match bytes 2 & 3'))
+
+    print(json.dumps(data, sort_keys=True, indent=4))
+
+if __name__ == '__main__':
+    main()
