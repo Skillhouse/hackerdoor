@@ -54,17 +54,17 @@ def get_sheets_acl():
         return new_acl
 
 def get_door_acl(door):
-    acl = GHACL()
+    ghacl = GHACL()
     acl_list = door.acl_list()
     if len(acl_list) == 0:
         raise(Exception('No ACL list from door controller'))
     for acl in acl_list:
-        acl.add(GHCard(acl['facility_code'], acl['card_code'],
+        ghacl.add(GHCard(acl['facility_code'], acl['card_code'],
             attribute=acl['attribute'],
             index=acl['index'],
             location=acl['addr'],
             ))
-    return acl
+    return ghacl
 
 def main():
     door = GHMUX()
