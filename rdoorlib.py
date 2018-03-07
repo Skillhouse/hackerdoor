@@ -164,6 +164,8 @@ class GHCard:
             else:
                 raise(Exception("attribute was not a two character hexadecimal string"))
             self.attribute = attribute
+            if self.attribute == '01':
+                self.allowed = True
         if re.match(r'\A[0-9a-fA-F]{2}\Z', str(facilityCode)):
             self.fc = facilityCode.upper()
         else:
@@ -173,7 +175,6 @@ class GHCard:
         else:
             raise(Exception("cardCode was not a four character hexadecimal string"))
         self.loc = location
-        self.allowed = False
         if allowed is not None:
             if self.allowed:
                 self.allowed = True
@@ -243,6 +244,9 @@ class GHACL:
         if not to_allow and not to_deny and not add:
             # no changes are needed
             return None
+        print(len(to_allow))
+        print(len(to_deny))
+        print(len(add))
         ## loop on to_allow for set attribute.0 = 1
         ## loop on to_deny for set attribute.0 = 0
         # how to figure out what the spare record spaces at the end are?
