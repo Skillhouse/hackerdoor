@@ -86,9 +86,17 @@ class GHMUX:
         self.close()
         return None
 
+    def set_attribute(self, index, attribute)
+        # TODO check input
+        match = self.run(letter='q', options= index+attribute)
+        # TODO error check
+        return match
+
     def add(self, attribute, facility_code, card_code):
-        pass
-        # call run(letter='v', options= attribute+facility_code+card_code
+        # TODO check input
+        match = self.run(letter='v', options= attribute+facility_code+card_code)
+        # TODO error check
+        return match
 
     def read_address(self, addr):
         address = str(addr)
