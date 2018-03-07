@@ -262,12 +262,10 @@ class GHACL:
 
         ## loop on to_allow for set attribute.0 = 1
         for index in to_allow:
-            print(index,'01allow')
-            #door.set_attribute(index,'01')
+            door.set_attribute(index,'01')
         ## loop on to_deny for set attribute.0 = 0
         for index in to_deny:
-            print(index,'00deny')
-            #door.set_attribute(index,'00')
+            door.set_attribute(index,'00')
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
         ## loop on add list to create calls for adding them
