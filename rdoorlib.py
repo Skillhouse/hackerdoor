@@ -86,7 +86,7 @@ class GHMUX:
         self.close()
         return None
 
-    def set_attribute(self, index, attribute)
+    def set_attribute(self, index, attribute):
         # TODO check input
         match = self.run(letter='q', options= index+attribute)
         # TODO error check
