@@ -27,12 +27,17 @@ class GHMUX:
     # from aclAtt()
     res_att_header = r'Set Attribute of Record \d+ at address \d+\r*\n'
     res_att = res_att_header + res_acl
+    # from eeMemory()
+    res_byte = r'(?P<byte>[A-F0-9]{2}) '
+    res_memory_header = r'Address (?P<address>[A-F0-9]{1,}) -HEX- '
+    res_memory = res_memory_header + r'(?P<byte_list>(?:' + res_memory_byte r')*) \r*\n'
 
     # re to match the various command return values
     letter_re = {}
     letter_re['k'] = re.compile(res_acl)
     letter_re['j'] = letter_re['k']
     letter_re['v'] = letter_re['k']
+    letter_re['o'] = re.compile(res_memory)
     letter_re['q'] = re.compile(res_att)
     letter_re['s'] = re.compile(res_list)
 
@@ -88,9 +93,13 @@ class GHMUX:
     def read_address(self, addr):
         address = str(addr)
         if not re.match(r'\A[0-9a-fA-F]{4}\Z', address):
-            raise(Exception("read() address is not a 4 digit hexadecimal string"))
+            raise(Exception("read_address() address is not a 4 digit hexadecimal string"))
         match = self.run(letter='o', options=address)
-        # and unpack
+        byte_list = match.group('byte_list')
+        out = []
+        for byte in re.finditer(self.res_byte, byte_list):
+            out.append( byte.group('byte') )
+        return out
 
     def acl_list(self):
         match = self.run(letter='s', options='', wait=0.5, cycle=30)
