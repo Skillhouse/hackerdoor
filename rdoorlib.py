@@ -176,7 +176,7 @@ class GHCard:
             raise(Exception("cardCode was not a four character hexadecimal string"))
         self.loc = location
         if allowed is not None:
-            if self.allowed:
+            if allowed:
                 self.allowed = True
                 self.attribute = '01'; # this will need to change if we define more bits in attribute
 
