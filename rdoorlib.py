@@ -223,10 +223,10 @@ class GHACL:
                 if new.allowed != old.allowed:
                     if new.allowed:
                         old.set_allowed = True
-                        to_allow = old.loc
+                        to_allow.append(old.loc)
                     else:
                         old.set_denied = True
-                        to_deny = old.loc
+                        to_deny.append(old.loc)
                 old.done = True
             else:
                 # not neccessarily will it have allowed set
@@ -238,8 +238,8 @@ class GHACL:
                 continue
             if old.allowed:
                 # no card matched in new ACL list, disable it
-                to_deny = old.loc
                 old.set_denied = True
+                to_deny.append(old.loc)
         if not to_allow and not to_deny and not add:
             # no changes are needed
             return None
