@@ -30,7 +30,7 @@ class GHMUX:
     # from eeMemory()
     res_byte = r'(?P<byte>[A-F0-9]{2}) '
     res_memory_header = r'Address (?P<address>[A-F0-9]{1,}) -HEX- '
-    res_memory = res_memory_header + r'(?P<byte_list>(?:' + res_memory_byte r')*) \r*\n'
+    res_memory = res_memory_header + r'(?P<byte_list>(?:' + res_byte + r')*) \r*\n'
 
     # re to match the various command return values
     letter_re = {}
