@@ -232,10 +232,10 @@ class GHACL:
                 if new.allowed != old.allowed:
                     if new.allowed:
                         old.set_allowed = True
-                        to_allow.append(old.loc)
+                        to_allow.append(old.index)
                     else:
                         old.set_denied = True
-                        to_deny.append(old.loc)
+                        to_deny.append(old.index)
                 old.done = True
             else:
                 # not neccessarily will it have allowed set
@@ -248,7 +248,7 @@ class GHACL:
             if old.allowed:
                 # no card matched in new ACL list, disable it
                 old.set_denied = True
-                to_deny.append(old.loc)
+                to_deny.append(old.index)
         if not to_allow and not to_deny and not add:
             # no changes are needed
             print('No changes needed')
@@ -261,13 +261,13 @@ class GHACL:
             raise(Exception('No door to update with acl delta'))
 
         ## loop on to_allow for set attribute.0 = 1
-        for location in to_allow:
-            print(location,'01allow')
-            #door.set_attribute(location,'01')
+        for index in to_allow:
+            print(index,'01allow')
+            #door.set_attribute(index,'01')
         ## loop on to_deny for set attribute.0 = 0
-        for location in to_deny:
-            print(location,'00deny')
-            #door.set_attribute(location,'00')
+        for index in to_deny:
+            print(index,'00deny')
+            #door.set_attribute(index,'00')
         # how to figure out what the spare record spaces at the end are?
         # find the new record spots at the end for the add list to get locations from
         ## loop on add list to create calls for adding them
