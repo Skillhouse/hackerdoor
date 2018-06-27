@@ -4,7 +4,8 @@ import httplib2
 
 from apiclient import discovery
 
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
+from googleapiclient import _auth
 
 from models.member import Member
 from models.card import Card
@@ -14,12 +15,14 @@ from models.exceptions.MissingCardError import MissingCardError
 def get_memberlist():
     """Pull a list of active members and their card information from a google sheet"""
 
-    scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
     # Use the Hackerdoor Service Account
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-        './configs/hackerdoor-servicecredentials.json', scopes)
-    http = credentials.authorize(httplib2.Http())
+    credentials = service_account.Credentials.from_service_account_file(
+        './configs/hackerdoor-servicecredentials.json',
+        scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly'])
+
+    http =  _auth.authorized_http(credentials)
+
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
