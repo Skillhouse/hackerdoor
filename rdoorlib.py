@@ -17,7 +17,9 @@ class GHMUX:
     res_acl_header = re.escape(r'Record #, Address, Addribute, Card #,  in HEX format ') + r'\r*\n'
     # from printACLR()
     res_acl_data = r'"(?P<index>[A-F0-9]{2})", "(?P<addr>[A-F0-9]{4})", "(?P<attribute>[A-F0-9]{2})", "(?P<card_num>(?P<facility_code>[A-F0-9]{2})(?P<card_code>[A-F0-9]{4}))"\r*\n'
-    res_acl = res_acl_header + res_acl_data
+    # v0.1.0.8 or so got rid of the every ACL header line
+    #res_acl = res_acl_header + res_acl_data
+    res_acl = res_acl_data
     # from printAllAclRecords()
     res_list_header_a = r'(?:[ ]\r*\n){2} Start printing of ACL List \r*\n \r*\n'
     res_list_header_b = re.escape(r' Format in Hex = Record #, EEProm Address, Attribute, Card code  ')
