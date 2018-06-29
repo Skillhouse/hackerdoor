@@ -130,8 +130,8 @@ class GHMUX:
         return out
 
 class GHCard:
-    # This is the attribute byte, but only item defined is bit 0 == 1 is access allowed, 0 is denied
-    attribute = '00'    # 2 digit hex number as string
+    # This is the attribute byte, but only item defined is bit 0 == 0 is access allowed, 1 is denied
+    attribute = '01'    # 2 digit hex number as string
     allowed = False # this is boolean from bit 0 of attribute
     # facility code (FC) 2 digit hex number as string
     fc = None
@@ -174,7 +174,7 @@ class GHCard:
             else:
                 raise(Exception("attribute was not a two character hexadecimal string"))
             self.attribute = attribute
-            if self.attribute == '01':
+            if self.attribute == '00':
                 self.allowed = True
         if re.match(r'\A[0-9a-fA-F]{2}\Z', str(facilityCode)):
             self.fc = facilityCode.upper()
@@ -188,7 +188,7 @@ class GHCard:
         if allowed is not None:
             if allowed:
                 self.allowed = True
-                self.attribute = '01'; # this will need to change if we define more bits in attribute
+                self.attribute = '00'; # this will need to change if we define more bits in attribute
 
     def __eq__( self, other ):
         if type(self) is type(other):
@@ -262,12 +262,12 @@ class GHACL:
         if door is None:
             raise(Exception('No door to update with acl delta'))
 
-        ## loop on to_allow for set attribute.0 = 1
+        ## loop on to_allow for set attribute.0 = 0
         for index in to_allow:
-            door.set_attribute(index,'01')
-        ## loop on to_deny for set attribute.0 = 0
-        for index in to_deny:
             door.set_attribute(index,'00')
+        ## loop on to_deny for set attribute.0 = 1
+        for index in to_deny:
+            door.set_attribute(index,'01')
 
         # ignore any pre-loading of space in the ACL list, just use "V" to add at end
         ## loop on add list to create calls for adding them
